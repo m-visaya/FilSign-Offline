@@ -2,7 +2,8 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./views/Home";
-import Predict from "./views/Predict";
+import Live from "./views/Live";
+import Capture from "./views/Capture";
 import { NativeBaseProvider } from "native-base";
 
 const Stack = createNativeStackNavigator();
@@ -16,7 +17,9 @@ const App = () => {
             headerShown: false,
           }}
         >
-          <Stack.Screen name="Home" component={Predict} />
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Live" component={Live} />
+          <Stack.Screen name="Capture" component={Capture} />
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>

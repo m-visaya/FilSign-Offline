@@ -12,7 +12,7 @@ import {
 } from "native-base";
 import { FontAwesome5, MaterialIcons, Feather } from "@expo/vector-icons";
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const Illust1 = require("../assets/Home.gif");
 
   return (
@@ -94,6 +94,7 @@ const HomeScreen = () => {
                 bg={"white"}
                 borderRadius="2xl"
                 shadow="3"
+                onPress={() => navigation.navigate("Live")}
               >
                 <Icon
                   as={Feather}
