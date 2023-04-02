@@ -18,10 +18,10 @@ const App = () => {
             headerShown: false,
           }}
         >
-          <Stack.Screen name="Media" component={Media} />
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Live" component={Live} />
           <Stack.Screen name="Capture" component={Capture} />
+          <Stack.Screen name="Media" component={Media} />
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
