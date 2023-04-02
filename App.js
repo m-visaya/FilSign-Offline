@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./views/Home";
 import Live from "./views/Live";
 import Capture from "./views/Capture";
+import Media from "./views/Media";
 import { NativeBaseProvider } from "native-base";
 
 const Stack = createNativeStackNavigator();
@@ -17,6 +18,7 @@ const App = () => {
             headerShown: false,
           }}
         >
+          <Stack.Screen name="Media" component={Media} />
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Live" component={Live} />
           <Stack.Screen name="Capture" component={Capture} />

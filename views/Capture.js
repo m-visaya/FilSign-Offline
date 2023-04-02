@@ -5,6 +5,7 @@ import {
   detectGLCapabilities,
   decodeJpeg,
 } from "@tensorflow/tfjs-react-native";
+import { manipulateAsync } from "expo-image-manipulator";
 import * as tf from "@tensorflow/tfjs";
 import "@tensorflow/tfjs-react-native";
 import "@tensorflow/tfjs-backend-webgl";
@@ -58,50 +59,59 @@ export default function Capture({ navigation }) {
     requestPermission();
   }
 
-  const imageToTensor = (image) => {
+  const imageToTensor = async (image) => {
     console.log("preprocessing");
-    const imgBuffer = tf.util.encodeString(image, "base64");
-    const raw = new Uint8Array(imgBuffer);
+    // const imgBuffer = tf.util.encodeString(image, "base64");
+    // const raw = new Uint8Array(imgBuffer);
+    // const imageTensor = decodeJpeg(raw);
+    // const resizedTensor = imageTensor.resizeBilinear([640, 640]);
+    // return resizedTensor;
+    const processedImage = await manipulateAsync(
+      image.uri,
+      [{ resize: { width: 640, height: 640 } }],
+      { base64: true }
+    );
+    const imgBuffer = tf.util.encodeString(processedImage.base64, "base64");
+    const raw = new Float32Array(imgBuffer);
     const imageTensor = decodeJpeg(raw);
-    const resizedTensor = imageTensor.resizeBilinear([640, 640]);
-    return resizedTensor;
+    return imageTensor;
   };
 
   const handleCapture = async () => {
     if (cameraRef.current && cameraReady.current) {
+      setPrediction(null);
       setIsCapturing(true);
-      const imgProm = cameraRef.current.takePictureAsync({
-        base64: true,
+      const img = await cameraRef.current.takePictureAsync({
         skipProcessing: true,
       });
-      const img = await imgProm;
       cameraRef.current.pausePreview();
-      setPhotoURI(img.uri);
-      const tensor = imageToTensor(img.base64);
+      const tensor = await imageToTensor(img);
       await predict(tensor);
+      tensor.dispose();
+      setPhotoURI(img.uri);
       setIsCapturing(false);
+      console.log(tf.memory());
     }
   };
 
   const predict = async (tensor) => {
     console.log("predicting");
-    setPrediction(null);
-    const input = tensor.div(255.0).expandDims(0);
-    const output = await model?.executeAsync(input);
-    const [boxes, scores, classes] = output.slice(0, 3);
-    // const boxes_data = boxes.dataSync();
-    const scores_data = scores.dataSync();
-    const classes_data = classes.dataSync();
-    for (let i = 0; i < scores_data.length; i++) {
-      if (scores_data[i] > 0.3) {
-        const class_label = labels[classes_data[i]];
-        const score = (scores_data[i] * 100).toFixed(1);
-        console.log(class_label, score);
-        setPrediction(class_label);
-        break;
-      }
-    }
-    tf.dispose([input, output]);
+    tf.tidy(() => {
+      const input = tensor.div(255.0).expandDims(0);
+      model?.executeAsync(input).then((output) => {
+        const scores = output[1];
+        const classes = output[2];
+        // const boxes_data = boxes.dataSync();
+        const scores_data = scores.dataSync();
+        const classes_data = classes.dataSync();
+        if (scores_data[0] > 0) {
+          const class_label = labels[classes_data[0]];
+          setPrediction(class_label);
+          // console.log(`${class_label} ${scores_data[0] * 100}`);
+        }
+        input.dispose();
+      });
+    });
   };
 
   return (
@@ -131,7 +141,7 @@ export default function Capture({ navigation }) {
             colorScheme={"light"}
             variant="ghost"
             position={"absolute"}
-            top={"8"}
+            top={"2"}
             left={"2"}
             zIndex={"20"}
             icon={

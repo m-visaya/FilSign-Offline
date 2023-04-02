@@ -43,6 +43,13 @@ export default function Live({ navigation }) {
         afID.current = null;
         await loadModel();
       })();
+
+    return () => {
+      setPrediction("");
+      cancelAnimationFrame(afID.current);
+      afID.current = null;
+      tf.disposeVariables();
+    };
   }, []);
 
   useEffect(() => {
@@ -66,49 +73,44 @@ export default function Live({ navigation }) {
     requestPermission();
   }
 
-  const predict = async (input) => {
-    const output = await model?.executeAsync(input);
-    return output;
-  };
-
-  const startPrediction = async (images, updatePreview, gl) => {
+  const startPrediction = (images) => {
     try {
       console.log("starting prediction");
-      await detectGLCapabilities(gl);
-      const loop = async () => {
-        try {
-          const nextImageTensor = images.next().value;
-          setPrediction(`None`);
-          if (nextImageTensor) {
-            const input = nextImageTensor.div(255.0).expandDims(0);
-            const output = await predict(input);
-            const [boxes, scores, classes] = output.slice(0, 3);
-            // const boxes_data = boxes.dataSync();
-            const scores_data = scores.dataSync();
-            const classes_data = classes.dataSync();
-            for (let i = 0; i < scores_data.length; i++) {
-              if (scores_data[i] > 0) {
-                const class_label = labels[classes_data[i]];
-                const score = (scores_data[i] * 100).toFixed(1);
-                console.log(class_label, score);
-                setPrediction(`Class: ${class_label} Confidence: ${score}`);
-              }
+      const loop = () => {
+        tf.tidy(() => {
+          try {
+            const nextImageTensor = images.next().value;
+            setPrediction("");
+            if (nextImageTensor) {
+              const input = nextImageTensor.div(255.0).expandDims(0);
+              model?.executeAsync(input).then((output) => {
+                const scores = output[1];
+                const classes = output[2];
+                // const boxes_data = boxes.dataSync();
+                const scores_data = scores.dataSync();
+                const classes_data = classes.dataSync();
+                if (scores_data[0] > 0) {
+                  const class_label = labels[classes_data[0]];
+                  setPrediction(class_label);
+                }
+                input.dispose();
+              });
             }
-            tf.dispose([input, output]);
-          }
+            nextImageTensor.dispose();
 
-          if (afID.current === 0) {
-            return;
-          }
+            if (afID.current === 0) {
+              return;
+            }
 
-          updatePreview();
-          gl.endFrameEXP();
-          tf.dispose([nextImageTensor, images]);
-          afID.current = requestAnimationFrame(loop);
-        } catch (error) {
-          console.log(error);
-        }
+            afID.current = requestAnimationFrame(loop);
+          } catch (error) {
+            console.log(error);
+          } finally {
+            tf.disposeVariables();
+          }
+        });
       };
+      tf.disposeVariables();
       loop();
     } catch (error) {
       console.log(error);
@@ -129,7 +131,7 @@ export default function Live({ navigation }) {
             colorScheme={"light"}
             variant="ghost"
             position={"absolute"}
-            top={"8"}
+            top={"2"}
             left={"2"}
             zIndex={"20"}
             icon={
@@ -143,20 +145,31 @@ export default function Live({ navigation }) {
             onPress={() => navigation.navigate("Home")}
           ></IconButton>
           <TensorCamera
-            style={{ height: "80%", width: "100%", aspectRatio: 3 / 4 }}
+            style={{ height: "100%", width: "100%", aspectRatio: 3 / 4 }}
             type={CameraType.back}
             resizeDepth={3}
             resizeHeight={640}
             resizeWidth={640}
-            cameraTextureHeight={1200}
-            cameraTextureWidth={1600}
             onReady={startPrediction}
-            autorender={false}
           ></TensorCamera>
-          <Center marginY="auto">
-            <Text color={"darkBlue.700"}> Prediction </Text>
-            <Text color={"light.400"} fontSize="3xl">
-              {prediction || "None"}
+          <Center
+            marginY="auto"
+            width={"full"}
+            flexDir={"row"}
+            height={"20"}
+            paddingX="6"
+            position={"absolute"}
+            bottom="0"
+            bgColor={"black"}
+            opacity={60}
+            zIndex={10}
+          >
+            <Text
+              fontSize={"3xl"}
+              fontWeight={"semibold"}
+              color="lightBlue.400"
+            >
+              {prediction}
             </Text>
           </Center>
         </Center>

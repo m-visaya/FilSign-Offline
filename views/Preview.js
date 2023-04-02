@@ -25,17 +25,16 @@ const Preview = (props) => {
         bgColor={"black"}
         opacity={60}
       >
-        <Text fontSize={"2xl"} color="light.100">
-          Class:
-        </Text>
-        <Text fontSize={"2xl"} color="darkBlue.500" marginLeft={"2"}>
+        <Text fontSize={"3xl"} color="lightBlue.400">
           {props.prediction ?? "Unknown"}
         </Text>
         <IconButton
           borderRadius="full"
           colorScheme={"light"}
           variant="ghost"
-          marginLeft="auto"
+          position={"absolute"}
+          right="0"
+          marginRight="3"
           icon={
             <Icon
               as={Ionicons}

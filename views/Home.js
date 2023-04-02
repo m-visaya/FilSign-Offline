@@ -120,6 +120,7 @@ const HomeScreen = ({ navigation }) => {
                 bg={"white"}
                 borderRadius="2xl"
                 shadow="3"
+                onPress={() => navigation.navigate("Media")}
               >
                 <Icon
                   as={FontAwesome5}
