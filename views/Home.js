@@ -14,6 +14,7 @@ import { FontAwesome5, MaterialIcons, Feather } from "@expo/vector-icons";
 
 const HomeScreen = ({ navigation }) => {
   const Illust1 = require("../assets/Home.gif");
+  const Logo = require("../assets/logo.png");
 
   return (
     <Box style={{ flex: 1 }} bg="white" safeArea>
@@ -26,9 +27,9 @@ const HomeScreen = ({ navigation }) => {
           w="100%"
         >
           <HStack alignItems="center">
-            <Text fontSize="20" fontWeight="semibold">
-              FilSign
-            </Text>
+
+          <Image source={Logo} resizeMethod="resize" alt="Filsign"></Image>
+
           </HStack>
           <HStack>
             <IconButton

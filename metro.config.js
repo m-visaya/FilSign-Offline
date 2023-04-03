@@ -5,7 +5,7 @@ module.exports = (() => {
   const { assetExts } = defaultConfig.resolver;
   return {
     resolver: {
-      assetExts: [...assetExts, "bin"],
+      assetExts: [...assetExts, "bin", "svg"],
     },
   };
 })();

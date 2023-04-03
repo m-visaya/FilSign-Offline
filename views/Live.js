@@ -148,8 +148,8 @@ export default function Live({ navigation }) {
             style={{ height: "100%", width: "100%", aspectRatio: 3 / 4 }}
             type={CameraType.back}
             resizeDepth={3}
-            resizeHeight={640}
-            resizeWidth={640}
+            resizeHeight={320}
+            resizeWidth={320}
             onReady={startPrediction}
           ></TensorCamera>
           <Center

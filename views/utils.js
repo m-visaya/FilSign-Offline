@@ -32,9 +32,13 @@
 //   require("../assets/model/group1-shard7of7.bin"),
 // ];
 
+// const modelWeights = [
+//   require("../assets/model/group1-shard1of2.bin"),
+//   require("../assets/model/group1-shard2of2.bin"),
+// ];
+
 const modelWeights = [
-  require("../assets/model/group1-shard1of2.bin"),
-  require("../assets/model/group1-shard2of2.bin"),
-];
+    require("../assets/model/group1-shard1of1.bin"),
+  ];
 
 export default modelWeights;
