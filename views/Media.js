@@ -20,7 +20,8 @@ import {
   detectGLCapabilities,
   decodeJpeg,
 } from "@tensorflow/tfjs-react-native";
-import modelWeights from "./utils";
+import { modelWeights } from "./utils";
+
 import { manipulateAsync } from "expo-image-manipulator";
 
 const modelJSON = require("../assets/model/model.json");
@@ -50,6 +51,8 @@ export default function Media({ navigation }) {
       (async () => {
         await loadModel();
       })();
+
+    pickImage();
   }, []);
 
   useEffect(() => {
@@ -65,11 +68,11 @@ export default function Media({ navigation }) {
     console.log("preprocessing");
     const processedImage = await manipulateAsync(
       image,
-      [{ resize: { width: 640, height: 640 } }],
+      [{ resize: { width: 320, height: 320 } }],
       { base64: true }
     );
     const imgBuffer = tf.util.encodeString(processedImage.base64, "base64");
-    const raw = new Float32Array(imgBuffer);
+    const raw = new Uint8Array(imgBuffer);
     const imageTensor = decodeJpeg(raw);
     return imageTensor;
   };
@@ -85,6 +88,7 @@ export default function Media({ navigation }) {
   };
 
   const predict = async (tensor) => {
+    setPrediction("Unknown");
     console.log("predicting");
     tf.tidy(() => {
       const input = tensor.div(255.0).expandDims(0);
@@ -118,7 +122,7 @@ export default function Media({ navigation }) {
             colorScheme={"light"}
             variant="ghost"
             position={"absolute"}
-            top={"2"}
+            top={"8"}
             left={"2"}
             zIndex={"20"}
             icon={
@@ -131,51 +135,52 @@ export default function Media({ navigation }) {
             }
             onPress={() => navigation.navigate("Home")}
           ></IconButton>
-          {image ? (
-            <Center width={"full"} height={"full"}>
-              <Image
-                source={{ uri: image }}
-                width={"full"}
-                height={"full"}
-                resizeMode="contain"
-                alt="Picked Image"
-              />
-              <Center
-                marginY="auto"
-                flexDir={"row"}
-                width={"full"}
-                height={"20"}
-                paddingX="6"
-                position={"absolute"}
-                bottom="0"
-                bgColor={"black"}
-                opacity={60}
-              >
+
+          <Center width={"full"} height={"full"}>
+            <Image
+              source={{ uri: image }}
+              width={"full"}
+              height={"full"}
+              resizeMode="contain"
+              alt="Picked Image"
+            />
+            <Center
+              marginY="auto"
+              flexDir={"row"}
+              width={"full"}
+              height={"20"}
+              paddingX="6"
+              position={"absolute"}
+              bottom="0"
+              bgColor={"black"}
+              opacity={60}
+            >
+              {prediction ? (
                 <Text fontSize={"3xl"} color="lightBlue.400">
-                  {prediction ?? "Unknown"}
+                  {prediction}
                 </Text>
-                <IconButton
-                  borderRadius="full"
-                  colorScheme={"light"}
-                  variant="ghost"
-                  position={"absolute"}
-                  right="0"
-                  marginRight="3"
-                  icon={
-                    <Icon
-                      as={MaterialCommunityIcons}
-                      name="folder-image"
-                      color="light.100"
-                      size={"3xl"}
-                    />
-                  }
-                  onPress={pickImage}
-                ></IconButton>
-              </Center>
+              ) : (
+                <Spinner size="lg" />
+              )}
+              <IconButton
+                borderRadius="full"
+                colorScheme={"light"}
+                variant="ghost"
+                position={"absolute"}
+                right="0"
+                marginRight="3"
+                icon={
+                  <Icon
+                    as={MaterialCommunityIcons}
+                    name="folder-image"
+                    color="light.100"
+                    size={"3xl"}
+                  />
+                }
+                onPress={pickImage}
+              ></IconButton>
             </Center>
-          ) : (
-            <Button onPress={pickImage}> Pick Image</Button>
-          )}
+          </Center>
         </Center>
       )}
     </Box>

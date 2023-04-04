@@ -37,8 +37,50 @@
 //   require("../assets/model/group1-shard2of2.bin"),
 // ];
 
-const modelWeights = [
-    require("../assets/model/group1-shard1of1.bin"),
-  ];
+const modelWeights = [require("../assets/model/group1-shard1of1.bin")];
 
-export default modelWeights;
+const images = [
+  [require("../assets/images/1_A.jpg"), "A"],
+  [require("../assets/images/2_B.jpg"), "B"],
+  [require("../assets/images/3_C.jpg"), "C"],
+  [require("../assets/images/4_D.jpg"), "D"],
+  [require("../assets/images/5_E.jpg"), "E"],
+  [require("../assets/images/6_F.jpg"), "F"],
+  [require("../assets/images/7_G.jpg"), "G"],
+  [require("../assets/images/8_H.jpg"), "H"],
+  [require("../assets/images/9_I.jpg"), "I"],
+  [require("../assets/images/10_J.jpg"), "J"],
+  [require("../assets/images/11_K.jpg"), "K"],
+  [require("../assets/images/12_L.jpg"), "L"],
+  [require("../assets/images/13_M.jpg"), "M"],
+  [require("../assets/images/14_N.jpg"), "N"],
+  [require("../assets/images/15_O.jpg"), "O"],
+  [require("../assets/images/16_P.jpg"), "P"],
+  [require("../assets/images/17_Q.jpg"), "Q"],
+  [require("../assets/images/18_R.jpg"), "R"],
+  [require("../assets/images/19_S.jpg"), "S"],
+  [require("../assets/images/20_T.jpg"), "T"],
+  [require("../assets/images/21_U.jpg"), "U"],
+  [require("../assets/images/22_V.jpg"), "V"],
+  [require("../assets/images/23_W.jpg"), "W"],
+  [require("../assets/images/24_X.jpg"), "X"],
+  [require("../assets/images/25_Y.jpg"), "Y"],
+  [require("../assets/images/26_Z.jpg"), "Z"],
+  [require("../assets/images/27_Boss.jpg"), "Boss"],
+  [require("../assets/images/28_Father.jpg"), "Father"],
+  [require("../assets/images/29_Good.jpg"), "Good"],
+  [require("../assets/images/30_Me.jpg"), "Me"],
+  [require("../assets/images/31_Mine.jpg"), "Mine"],
+  [require("../assets/images/32_Mother.jpg"), "Mother"],
+  [require("../assets/images/33_Onion.jpg"), "Onion"],
+  [require("../assets/images/34_Quiet.jpg"), "Quiet"],
+  [require("../assets/images/35_Responsible.jpg"), "Responsible"],
+  [require("../assets/images/36_Serious.jpg"), "Serious"],
+  [require("../assets/images/37_Think.jpg"), "Think"],
+  [require("../assets/images/38_This.jpg"), "This"],
+  [require("../assets/images/39_Wait.jpg"), "Wait"],
+  [require("../assets/images/40_Water.jpg"), "Water"],
+  [require("../assets/images/41_You.jpg"), "You"],
+];
+
+export { modelWeights, images };

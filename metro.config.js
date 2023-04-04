@@ -1,11 +1,12 @@
+// Learn more https://docs.expo.io/guides/customizing-metro
 const { getDefaultConfig } = require("expo/metro-config");
 
-module.exports = (() => {
-  const defaultConfig = getDefaultConfig(__dirname);
-  const { assetExts } = defaultConfig.resolver;
-  return {
-    resolver: {
-      assetExts: [...assetExts, "bin", "svg"],
-    },
-  };
-})();
+const config = getDefaultConfig(__dirname);
+
+config.resolver.assetExts.push(
+  // Adds support for `.db` files for SQLite databases
+  "bin",
+  "svg"
+);
+
+module.exports = config;

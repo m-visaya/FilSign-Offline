@@ -6,9 +6,7 @@ import {
   detectGLCapabilities,
 } from "@tensorflow/tfjs-react-native";
 import * as tf from "@tensorflow/tfjs";
-import "@tensorflow/tfjs-react-native";
-import "@tensorflow/tfjs-backend-webgl";
-import modelWeights from "./utils";
+import { modelWeights } from "./utils";
 import { Box, Spinner, Text, Center, Icon, IconButton } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -20,7 +18,6 @@ export default function Live({ navigation }) {
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [model, setModel] = useState(null);
   const [prediction, setPrediction] = useState("");
-
   const afID = useRef(null);
 
   const loadModel = async () => {
@@ -73,7 +70,7 @@ export default function Live({ navigation }) {
     requestPermission();
   }
 
-  const startPrediction = (images) => {
+  const startPrediction = async (images) => {
     try {
       console.log("starting prediction");
       const loop = () => {
@@ -131,7 +128,7 @@ export default function Live({ navigation }) {
             colorScheme={"light"}
             variant="ghost"
             position={"absolute"}
-            top={"2"}
+            top={"8"}
             left={"2"}
             zIndex={"20"}
             icon={

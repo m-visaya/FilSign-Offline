@@ -1,41 +1,51 @@
 import {
   Box,
-  Fab,
   Heading,
   Icon,
   HStack,
-  IconButton,
   Text,
   Image,
   Button,
   ScrollView,
 } from "native-base";
-import { FontAwesome5, MaterialIcons, Feather } from "@expo/vector-icons";
+import { FontAwesome5, Feather } from "@expo/vector-icons";
+import { images } from "./utils";
 
 const HomeScreen = ({ navigation }) => {
   const Illust1 = require("../assets/Home.gif");
-  const Logo = require("../assets/logo.png");
+  const Logo = require("../assets/icon.png");
 
   return (
     <Box style={{ flex: 1 }} bg="white" safeArea>
       <ScrollView showsVerticalScrollIndicator={false}>
         <HStack
           px="4"
-          py="3"
+          py="4"
           justifyContent="space-between"
           alignItems="center"
           w="100%"
         >
           <HStack alignItems="center">
-
-          <Image source={Logo} resizeMethod="resize" alt="Filsign"></Image>
-
+            <Image
+              source={Logo}
+              size={"2xs"}
+              resizeMode="contain"
+              alt="Filsign"
+            ></Image>
+            <Text
+              fontSize="xl"
+              fontWeight="bold"
+              marginLeft={"1"}
+              color={"darkBlue.700"}
+            >
+              FilSign
+            </Text>
           </HStack>
-          <HStack>
+          {/* <HStack>
             <IconButton
               icon={<Icon as={MaterialIcons} name="more-vert" size="sm" />}
             />
-          </HStack>
+          </HStack> */}
         </HStack>
         <Box style={{ flex: 1 }}>
           <Heading
@@ -64,10 +74,10 @@ const HomeScreen = ({ navigation }) => {
             >
               Classify FSL
             </Heading>
-            <HStack justifyContent={"space-around"} paddingTop={"5"}>
+            <HStack justifyContent={"center"} paddingTop={"5"} space={"5"}>
               <Button
-                height={"20"}
-                width={"20"}
+                height={"24"}
+                width={"24"}
                 colorScheme={"dark"}
                 bg={"white"}
                 borderRadius="2xl"
@@ -82,6 +92,7 @@ const HomeScreen = ({ navigation }) => {
                   color={"teal.600"}
                 />
                 <Text
+                  marginTop={"1"}
                   color={"darkBlue.700"}
                   fontSize={"2xs"}
                   textTransform={"uppercase"}
@@ -90,8 +101,8 @@ const HomeScreen = ({ navigation }) => {
                 </Text>
               </Button>
               <Button
-                height={"20"}
-                width={"20"}
+                height={"24"}
+                width={"24"}
                 colorScheme={"dark"}
                 bg={"white"}
                 borderRadius="2xl"
@@ -106,6 +117,7 @@ const HomeScreen = ({ navigation }) => {
                   marginLeft={"0.5"}
                 />
                 <Text
+                  marginTop={"1"}
                   color={"darkBlue.700"}
                   fontSize={"2xs"}
                   textTransform={"uppercase"}
@@ -115,8 +127,8 @@ const HomeScreen = ({ navigation }) => {
                 </Text>
               </Button>
               <Button
-                height={"20"}
-                width={"20"}
+                height={"24"}
+                width={"24"}
                 colorScheme={"dark"}
                 bg={"white"}
                 borderRadius="2xl"
@@ -131,6 +143,7 @@ const HomeScreen = ({ navigation }) => {
                   color={"darkBlue.700"}
                 />
                 <Text
+                  marginTop={"1"}
                   color={"darkBlue.700"}
                   fontSize={"2xs"}
                   textTransform={"uppercase"}
@@ -138,7 +151,7 @@ const HomeScreen = ({ navigation }) => {
                   Image
                 </Text>
               </Button>
-              <Button
+              {/* <Button
                 height={"20"}
                 width={"20"}
                 colorScheme={"dark"}
@@ -160,7 +173,7 @@ const HomeScreen = ({ navigation }) => {
                 >
                   Soon
                 </Text>
-              </Button>
+              </Button> */}
             </HStack>
           </Box>
           <Box marginX={4}>
@@ -172,62 +185,24 @@ const HomeScreen = ({ navigation }) => {
               Sign Languages
             </Heading>
             <HStack flexWrap={"wrap"} paddingTop={"5"}>
-              <Box width={"43%"} marginBottom={"5"} marginX="auto">
-                <Image
-                  resizeMode="cover"
-                  height={"40"}
-                  borderRadius={"2xl"}
-                  source={{
-                    uri: "https://images.pexels.com/photos/1366997/pexels-photo-1366997.jpeg?auto=compress&cs=tinysrgb",
-                  }}
-                  alt="Sign language"
-                />
-                <Text marginTop={"1"} fontWeight={"medium"}>
-                  Sign Language n
-                </Text>
-              </Box>
-              <Box width={"43%"} marginBottom={"5"} marginX="auto">
-                <Image
-                  resizeMode="cover"
-                  height={"40"}
-                  borderRadius={"2xl"}
-                  source={{
-                    uri: "https://images.pexels.com/photos/1366997/pexels-photo-1366997.jpeg?auto=compress&cs=tinysrgb",
-                  }}
-                  alt="Sign language"
-                />
-                <Text marginTop={"1"} fontWeight={"medium"}>
-                  Sign Language n
-                </Text>
-              </Box>
-              <Box width={"43%"} marginBottom={"5"} marginX="auto">
-                <Image
-                  resizeMode="cover"
-                  height={"40"}
-                  borderRadius={"2xl"}
-                  source={{
-                    uri: "https://images.pexels.com/photos/1366997/pexels-photo-1366997.jpeg?auto=compress&cs=tinysrgb",
-                  }}
-                  alt="Sign language"
-                />
-                <Text marginTop={"1"} fontWeight={"medium"}>
-                  Sign Language n
-                </Text>
-              </Box>
-              <Box width={"43%"} marginBottom={"5"} marginX="auto">
-                <Image
-                  resizeMode="cover"
-                  height={"40"}
-                  borderRadius={"2xl"}
-                  source={{
-                    uri: "https://images.pexels.com/photos/1366997/pexels-photo-1366997.jpeg?auto=compress&cs=tinysrgb",
-                  }}
-                  alt="Sign language"
-                />
-                <Text marginTop={"1"} fontWeight={"medium"}>
-                  Sign Language n
-                </Text>
-              </Box>
+              {images.map((val, idx) => (
+                <Box width={"43%"} marginBottom={"5"} marginX="auto" key={idx}>
+                  <Image
+                    resizeMode="cover"
+                    height={"40"}
+                    borderRadius={"2xl"}
+                    source={val[0]}
+                    alt="Sign language"
+                  />
+                  <Text
+                    marginTop={"1"}
+                    textAlign={"center"}
+                    fontWeight={"medium"}
+                  >
+                    {val[1]}
+                  </Text>
+                </Box>
+              ))}
             </HStack>
           </Box>
 

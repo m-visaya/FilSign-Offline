@@ -9,7 +9,7 @@ import { manipulateAsync } from "expo-image-manipulator";
 import * as tf from "@tensorflow/tfjs";
 import "@tensorflow/tfjs-react-native";
 import "@tensorflow/tfjs-backend-webgl";
-import modelWeights from "./utils";
+import { modelWeights } from "./utils";
 import { Box, Spinner, Text, Center, Icon, IconButton } from "native-base";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import Preview from "./Preview";
@@ -68,11 +68,11 @@ export default function Capture({ navigation }) {
     // return resizedTensor;
     const processedImage = await manipulateAsync(
       image.uri,
-      [{ resize: { width: 640, height: 640 } }],
+      [{ resize: { width: 320, height: 320 } }],
       { base64: true }
     );
     const imgBuffer = tf.util.encodeString(processedImage.base64, "base64");
-    const raw = new Float32Array(imgBuffer);
+    const raw = new Uint8Array(imgBuffer);
     const imageTensor = decodeJpeg(raw);
     return imageTensor;
   };
@@ -90,7 +90,6 @@ export default function Capture({ navigation }) {
       tensor.dispose();
       setPhotoURI(img.uri);
       setIsCapturing(false);
-      console.log(tf.memory());
     }
   };
 
@@ -141,7 +140,7 @@ export default function Capture({ navigation }) {
             colorScheme={"light"}
             variant="ghost"
             position={"absolute"}
-            top={"2"}
+            top={"8"}
             left={"2"}
             zIndex={"20"}
             icon={
